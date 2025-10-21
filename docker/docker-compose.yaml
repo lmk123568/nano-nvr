@@ -1,0 +1,50 @@
+services:
+  nanonvr-web-server:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.web
+    image: nanonvr-web
+    container_name: nanonvr-web-server
+    command: "nginx -p /workspace -c /workspace/nginx.conf -g 'daemon off;'"
+    network_mode: "host"
+    volumes:
+      - ../web:/workspace
+      - /opt/zlm/record:/opt/zlm/record
+      - /opt/zlm/conf:/opt/zlm/conf
+    restart: unless-stopped
+    depends_on:
+      - nanonvr-backend-server
+      - zlm-server
+
+  nanonvr-backend-server:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.backend
+    image: nanonvr-backend
+    container_name: nanonvr-backend-server
+    command: "python main.py"
+    network_mode: "host"
+    volumes:
+      - ../backend:/workspace
+      - /opt/zlm/record:/opt/zlm/record
+      - /opt/zlm/conf:/opt/zlm/conf
+    restart: unless-stopped
+    depends_on:
+      - zlm-server
+
+  zlm-server:
+    image: zlmediakit/zlmediakit:master
+    container_name: zlm-server
+    ports:
+      - "1935:1935" # RTMP
+      - "8080:80" # HTTP
+      - "8443:443" # HTTPS
+      - "8554:554" # RTSP
+      - "10000:10000"
+      - "10000:10000/udp"
+      - "8000:8000/udp"
+      - "9000:9000/udp"
+    volumes:
+      - /opt/zlm/record:/opt/media/bin/www/record
+      - /opt/zlm/conf:/opt/media/conf
+    restart: unless-stopped

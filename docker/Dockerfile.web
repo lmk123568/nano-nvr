@@ -1,0 +1,5 @@
+FROM nginx:alpine
+
+WORKDIR /workspace
+
+EXPOSE 10800

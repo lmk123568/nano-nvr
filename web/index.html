@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>NanoNVR</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport" />
+  <link href="assets/layui/css/layui.css" rel="stylesheet" />
+  <link href="./assets/logo.svg" rel="icon" type="image/svg" />
+  <style>
+    .layui-layer-title {
+      background: #fafafa;
+      height: 35px;
+      line-height: 40px;
+    }
+
+    .layui-layer-setwin {
+      top: 10px;
+    }
+
+    .layui-btn {
+      border-radius: 5px;
+    }
+
+    .layui-layer {
+      border-radius: 10px;
+    }
+
+    .layui-layer-title {
+      border-radius: 10px;
+    }
+
+    .layui-card {
+      border-radius: 8px;
+    }
+    .layui-nav .layui-this:after,
+    .layui-nav-bar {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layui-layout layui-layout-admin">
+    <div class="layui-header" style="background-color: #fafafa;">
+      <div class="layui-logo" style="background-color: #2f363c; font-weight: 600; font-size: 1.3rem; color: #c2c2c2;">
+        NanoNVR</div>
+
+      <!-- 头部区域（可配合layui 已有的水平导航） -->
+      <ul class="layui-nav layui-layout-left">
+
+        <!-- 刷新按钮 -->
+        <li class="layui-nav-item" id="refresh" title="刷新当前页面">
+          <a href="javascript:;">
+            <i class="layui-icon layui-icon-refresh layui-anim" style="color: #23292e; font-size: 1.2rem;"></i>
+          </a>
+        </li>
+
+        <!-- 移动端显示 -->
+        <!-- <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+          <i class="layui-icon layui-icon-spread-left"></i>
+        </li>
+        <li class="layui-nav-item layui-hide-xs">
+          <a href="javascript:;">nav 1</a>
+        </li>
+        <li class="layui-nav-item layui-hide-xs">
+          <a href="javascript:;">nav 2</a>
+        </li>
+        <li class="layui-nav-item layui-hide-xs">
+          <a href="javascript:;">nav 3</a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">nav groups</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">menu 11</a></dd>
+            <dd><a href="javascript:;">menu 22</a></dd>
+            <dd><a href="javascript:;">menu 33</a></dd>
+          </dl>
+        </li> -->
+      </ul>
+
+      <ul class="layui-nav layui-layout-right" style="padding: 0 16px;">
+
+        <li class="layui-nav-item layui-hide layui-show-sm-inline-block">
+          <a href="javascript:;" style="color: #23292e;">
+            <img class="layui-nav-img" src="./assets/admin.png" />
+            admin
+          </a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">Your Profile</a></dd>
+            <dd><a href="javascript:;">Settings</a></dd>
+            <dd><a href="javascript:;">Sign out</a></dd>
+          </dl>
+
+        </li>
+
+        <!-- <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
+          <a href="javascript:;">
+            <i class="layui-icon layui-icon-more-vertical"></i>
+          </a>
+        </li> -->
+
+      </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+      <div class="layui-side-scroll">
+        <ul class="layui-nav layui-nav-tree">
+          <li class="layui-nav-item">
+            <a data-page="./pages/home.html"><i class="layui-icon layui-icon-console"
+                style="margin-right: 16px"></i>首页概览</a>
+          </li>
+        </ul>
+
+        <ul class="layui-nav layui-nav-tree">
+          <li class="layui-nav-item">
+            <a data-page="./pages/video-streams.html"><i class="layui-icon layui-icon-video"
+                style="margin-right: 16px"></i>流ID管理</a>
+          </li>
+        </ul>
+
+        <ul class="layui-nav layui-nav-tree">
+          <li class="layui-nav-item">
+            <a data-page="./pages/video-wall.html"><i class="layui-icon layui-icon-layer"
+                style="margin-right: 16px"></i>分屏展示</a>
+          </li>
+        </ul>
+
+        <ul class="layui-nav layui-nav-tree">
+          <li class="layui-nav-item">
+            <a data-page="./pages/video-playback.html"><i class="layui-icon layui-icon-play"
+                style="margin-right: 16px"></i>录像回看</a>
+          </li>
+        </ul>
+
+        <ul class="layui-nav layui-nav-tree">
+          <li class="layui-nav-item">
+            <a data-page="./pages/api-docs.html"><i class="layui-icon layui-icon-link"
+                style="margin-right: 16px"></i>接口文档</a>
+          </li>
+        </ul>
+
+        <ul class="layui-nav layui-nav-tree">
+          <li class="layui-nav-item">
+            <a data-page="./pages/settings.html"><i class="layui-icon layui-icon-set"
+                style="margin-right: 16px"></i>基础设置</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="layui-body" style="background-color: #eeeeee; overflow-y: auto; padding: 0px;"></div>
+
+    <script src="assets/layui/layui.js"></script>
+    <script src="./assets/echarts.min.js"></script>
+    <script src="./assets/ZLMRTCClient.js"></script>
+
+    <script>
+
+      layui.use(["jquery"], function () {
+        let $ = layui.jquery;
+        // window.homePolling = false;
+
+        // 子页面加载函数
+        function loadPage(url) {
+          $(".layui-body").html(
+            '<div style="text-align:center;padding:20px;">加载中...</div>'
+          );
+
+          return $.get(url)
+            .done(function (data) {
+              // 离开页面前执行回调函数
+              if (typeof destroyVideoCells === "function") {
+                destroyVideoCells();
+              }
+              if (typeof clearnTimer === "function") {
+                clearnTimer();
+              }
+
+              $(".layui-body").html(data);
+
+              // 找到匹配 data-page 的菜单项并添加高亮
+              $(".layui-nav-tree .layui-this").removeClass("layui-this");
+              $('.layui-nav-tree a[data-page="' + url + '"]')
+                .parent()
+                .addClass("layui-this");
+            })
+            .fail(function () {
+              $(".layui-body").html(
+                `<div style="color:#ff5722; padding:20px;">加载失败: 页面 ${url} 不存在</div>`
+              );
+            });
+
+        }
+
+        // 使用事件委托监听菜单点击
+        $("body").on("click", "a[data-page]", function (e) {
+          e.preventDefault();
+          loadPage((url = $(this).data("page")));
+        });
+
+        // 监听刷新按钮点击
+        $("#refresh").on("click", function () {
+          const $icon = $(this).find(".layui-icon");
+          const currentUrl = $('.layui-nav-tree li.layui-this a[data-page]').data('page');
+
+          if (!currentUrl) { return }
+
+          $icon
+            .removeClass("layui-icon-refresh")
+            .addClass("layui-icon-loading layui-anim layui-anim-rotate");
+
+          loadPage(currentUrl).always(() => {
+            $icon
+              .removeClass("layui-icon-loading layui-anim layui-anim-rotate")
+              .addClass("layui-icon-refresh");
+          });
+        });
+
+        // 默认加载首页
+        loadPage("./pages/home.html");
+      });
+    </script>
+</body>
+
+</html>
