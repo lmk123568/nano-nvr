@@ -38,7 +38,7 @@ docker-compose restart
 
 <img src="./snapshots/wall.png" alt="wall" style="zoom:33%;" />
 
-<img src="./snapshots/playback.png" alt="playback" style="zoom:33%;" />
+
 
 ### 详细功能
 
