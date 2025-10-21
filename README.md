@@ -1,6 +1,6 @@
 <div align="center">
   <img src="./web/assets/logo.svg" width="64px"/>
-  <h3>NanoNVR</h3>
+  <h1>NanoNVR</h1>
   <a>
     <img src="https://img.shields.io/badge/FastAPI-0.199.0-009485.svg" />
     <img src="https://img.shields.io/badge/Layui-2.11-16baaa.svg" />
